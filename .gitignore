@@ -51,3 +51,5 @@ yarn.lock
 *.zip
 fileAsync.js
 FileUpload.bat
+
+*.pyc
