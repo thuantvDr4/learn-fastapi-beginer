@@ -48,6 +48,7 @@ def get_todo(id: int):
     for todo in _all_todos:
         if todo.id == id:
             return todo
+    raise HTTPException(status_code=404, detail="Todo not found")
 
 @app.get('/todos', response_model= List[Todo])
 def get_todos(first_n:int = None):
@@ -78,7 +79,8 @@ def create_todo(todo: TodoCreate):
 def update_todo(id:int, updated_todo:TodoUpdate):
     todo = next((td for td in _all_todos if td.id == id), None)
     if not todo:
-        return {'error': 'Todo not found'}
+        raise HTTPException(status_code=404, detail="Todo not found")
+
     updated_data = updated_todo.model_dump(exclude_unset=True)
 
     for field, value in updated_data.items():
@@ -94,7 +96,8 @@ def update_todo_partial(id:int, updated_todo:TodoUpdate):
             updated = todo.model_copy(update=updated_data)
             _all_todos[i] = updated
             return updated
-    raise HTTPException(status_code=404, detail="Todo not found 135")
+
+    raise HTTPException(status_code=404, detail="Todo not found")
 
 @app.delete('/todos/{id}', response_model=Todo)
 def delete_todo(id:int):
@@ -102,8 +105,8 @@ def delete_todo(id:int):
         if todo.id == id:
             new_todos = _all_todos.pop(index)
             return new_todos
-    return 'Error, todo not found'
 
+    raise HTTPException(status_code=404, detail="Todo not found")
 @app.delete('/todos')
 def delete_all():
     _all_todos.clear()
