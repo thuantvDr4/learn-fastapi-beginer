@@ -52,4 +52,5 @@ yarn.lock
 fileAsync.js
 FileUpload.bat
 
+__pycache__/
 *.pyc
